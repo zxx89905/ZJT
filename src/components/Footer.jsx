@@ -419,7 +419,7 @@ function Footer() {
         </ThemeSection>
 
         <SocialSection>
-          <GithubLink href="https://github.com/avictormorais/posterfy" target="blank">
+          <GithubLink href="https://github.com/zxx89905/-" target="blank">
             <FaGithub /> {t("ViewGitHub", "GitHub")}
           </GithubLink>
         </SocialSection>
