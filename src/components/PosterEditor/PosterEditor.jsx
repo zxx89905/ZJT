@@ -16,6 +16,7 @@ import { MdOutlineRefresh } from "react-icons/md";
 import LoadingDiv from "../LoadingDiv";
 import { Palette } from "color-thief-react";
 import CanvasPoster from "./CanvasPoster";
+import CanvasPoster23 from "./CanvasPoster23"; // 新增
 
 const Container = styled.div`
     width: 80%;
@@ -255,7 +256,7 @@ const ShortcutsInfo = styled.p`
     }
 `
 
-function PosterEditor({ albumID, handleClickBack }) {
+function PosterEditor({ albumID, handleClickBack, posterWidth = 2480, posterHeight = 3508, posterRatio = "a4" }) {
     const { t } = useTranslation();
     const previewRef = useRef(null);
 
@@ -272,7 +273,6 @@ function PosterEditor({ albumID, handleClickBack }) {
     const [color1, setcolor1] = useState('#ff0000');
     const [color2, setcolor2] = useState('#00ff40');
     const [color3, setcolor3] = useState('#2600ff');
-    const [useWatermark, setUseWatermark] = useState(true);
     const [useFade, setUseFade] = useState(true);
     const [showTracklist, setShowTracklist] = useState(false);
     const [albumCover, setAlbumCover] = useState('');
@@ -348,7 +348,6 @@ function PosterEditor({ albumID, handleClickBack }) {
         runtime,
         backgroundColor,
         textColor,
-        useWatermark,
         useFade,
         showTracklist,
         tracklist,
@@ -579,13 +578,27 @@ function PosterEditor({ albumID, handleClickBack }) {
                         </TextBack>
                     </DivBack>
                     <ContainerEditor>
+                        {posterRatio === "2-3" ? (
+                        <CanvasPoster23
+                            onImageReady={handleImageReady}
+                            posterData={posterData}
+                            generatePoster={generatePoster}
+                            onTitleSizeAdjust={handleTitleSizeAdjust}
+                            customFont={customFont}
+                            width={posterWidth}
+                            height={posterHeight}
+                        />
+                        ) : (
                         <CanvasPoster
                             onImageReady={handleImageReady}
                             posterData={posterData}
                             generatePoster={generatePoster}
                             onTitleSizeAdjust={handleTitleSizeAdjust}
                             customFont={customFont}
+                            width={posterWidth}
+                            height={posterHeight}
                         />
+                        )}
                         {image ? (
                             <PosterPreview src={image} ref={previewRef} />
                         ) : (
@@ -687,13 +700,7 @@ function PosterEditor({ albumID, handleClickBack }) {
                                         value={color3} 
                                         onClick={(e) => handleColorInputClick(e, 'color3')}
                                     />
-            
-                                    <CheckInput
-                                        title={t('EDITOR_Watermark')}
-                                        value={useWatermark}
-                                        onChange={(newValue) => setUseWatermark(newValue)}
-                                        text={t('EDITOR_WatermarkText')}
-                                    />
+
                                     <CheckInput
                                         title={t('EDITOR_Fade')}
                                         value={useFade}

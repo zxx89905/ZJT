@@ -12,7 +12,7 @@ const FlagButton = styled.button`
   align-items: center;
   justify-content: center;
   padding: 8px;
-  border-radius: 50%;
+  border-radius: 8px; /* 由圆形改为略微圆角的长方形，可以用0改为直角 */
   background: transparent;
   border: none;
   cursor: pointer;
@@ -26,15 +26,19 @@ const FlagButton = styled.button`
 const FlagWrapper = styled.div`
   position: relative;
   overflow: hidden;
-  border-radius: 50%;
+  border-radius: 6px; /* 由50%改为6px或0，长方形 */
   width: 2.5em;
-  height: 2.5em;
+  height: 1.5em; /* 更接近国旗比例 */
   display: flex;
   align-items: center;
   justify-content: center;
   
   & > span {
-    transform: scale(1.5);
+    transform: scale(1.2);
+    width: 100%!important;
+    height: 100%!important;
+    object-fit: cover;
+    border-radius: 0!important;
   }
 `
 
@@ -88,7 +92,11 @@ const LanguageOption = styled.button`
 
 const FlagIcon = styled(ReactCountryFlag)`
   margin-right: 8px;
-  transform: scale(1.2);
+  width: 2em !important;
+  height: 1.3em !important;
+  border-radius: 4px !important;
+  object-fit: cover;
+  /* 由圆形变成长方形 */
 `
 
 function LanguageSelector() {
@@ -122,14 +130,15 @@ function LanguageSelector() {
     setIsOpen(false)
   }
 
+  // 当前国旗：中文 -> 中国国旗；英文 -> 英国国旗（GB）；其他默认 GB
   const getCurrentFlag = () => {
     switch (i18n.language) {
-      case "pt":
-        return "BR"
-      case "es":
-        return "ES"
+      case "zh":
+        return "CN"
+      case "en":
+        return "GB"
       default:
-        return "US"
+        return "GB"
     }
   }
 
@@ -137,7 +146,7 @@ function LanguageSelector() {
     <LanguageSelectorContainer className="language-selector">
       <FlagButton onClick={toggleDropdown} aria-label="Select language">
         <FlagWrapper>
-          <ReactCountryFlag countryCode={getCurrentFlag()} svg style={{ width: "150%", height: "150%" }} />
+          <ReactCountryFlag countryCode={getCurrentFlag()} svg style={{ width: "100%", height: "100%" }} />
         </FlagWrapper>
       </FlagButton>
 
@@ -145,17 +154,13 @@ function LanguageSelector() {
         <DropdownMenu>
           <Triangle />
           <DropdownContent>
-            <LanguageOption onClick={() => changeLanguage("pt")}>
-              <FlagIcon countryCode="BR" svg style={{ width: "1.5em", height: "1.5em" }} />
-              Português
+            <LanguageOption onClick={() => changeLanguage("zh")}>
+              <FlagIcon countryCode="CN" svg />
+              中文
             </LanguageOption>
             <LanguageOption onClick={() => changeLanguage("en")}>
-              <FlagIcon countryCode="US" svg style={{ width: "1.5em", height: "1.5em" }} />
+              <FlagIcon countryCode="GB" svg />
               English
-            </LanguageOption>
-            <LanguageOption onClick={() => changeLanguage("es")}>
-              <FlagIcon countryCode="ES" svg style={{ width: "1.5em", height: "1.5em" }} />
-              Español
             </LanguageOption>
           </DropdownContent>
         </DropdownMenu>
