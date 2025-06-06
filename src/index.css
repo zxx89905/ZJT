@@ -1,47 +1,64 @@
 :root {
-  --backgroundColor: #070815;
-  --PosterfyGreen: #29d89e;
+  --PosterfyGreen: #ff3e03;
+  --textColor: white;
 }
 
-.theme-dark {
-  --backgroundColor: #070815;
-}
-
-
-.theme-rose {
-  --backgroundColor: #232136;
-}
-
-.theme-fy {
-  --backgroundColor: #151515;
-}
-
-.theme-carmesin {
-  --backgroundColor: #1f0c19;
-}
-
-.theme-brown {
-  --backgroundColor: #1e1516;
-}
-
-*{
-  font-family: montserrat, sans-serif;
-  margin: 0;
-  padding: 0;
-  color: white;
-  transition: color 0.5s, background-color 0.5s;
-}
-
+/* 主题背景设置 */
 body {
   margin: 0;
   display: flex;
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
-  background-color: var(--backgroundColor);
   overflow-x: hidden;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  transition: background-image 0.5s ease;
 }
 
-#root{
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.3); /* 统一遮罩，增强文字可读性 */
+  z-index: -1;
+  transition: background-color 0.5s ease;
+}
+
+/* 主题定义：每个主题对应一张背景图 */
+.theme-dark {
+  background-image: url('/黑色.png');
+}
+
+.theme-rose {
+  background-image: url('/日漫.png');
+}
+
+.theme-fy {
+  background-image: url('/蓝色.png');
+}
+
+.theme-carmesin {
+  background-image: url('/动漫.png');
+}
+
+.theme-brown {
+  background-image: url('/雷电.png');
+}
+
+/* 通用样式 */
+* {
+  font-family: montserrat, sans-serif;
+  margin: 0;
+  padding: 0;
+  color: var(--textColor);
+  transition: color 0.5s, background-image 0.5s; /* 背景图和文字颜色过渡 */
+}
+
+#root {
   width: 100%;
 }

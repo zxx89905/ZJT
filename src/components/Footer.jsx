@@ -386,8 +386,8 @@ function Footer() {
           <CreditText>
             <div className="credit-content">
               {t("MadeBy")}{" "}
-              <a href="https://github.com/avictormorais" target="blank">
-                Victor
+              <a href="https://github.com/zxx89905" target="blank">
+                ZJT
               </a>
             </div>
           </CreditText>
@@ -419,7 +419,7 @@ function Footer() {
         </ThemeSection>
 
         <SocialSection>
-          <GithubLink href="https://github.com/zxx89905/-" target="blank">
+          <GithubLink href="https://github.com/zxx89905/ZJT" target="blank">
             <FaGithub /> {t("ViewGitHub", "GitHub")}
           </GithubLink>
         </SocialSection>
