@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/avictormorais/posterfy/refs/heads/main/public/ico.png" width="150" height="150" alt="Posterfy Logo">
+  <img src="public/ico.png" width="150" height="150" alt="Posterfy Logo">
 </p>
 
 <h1 align="center">Posterfy</h1>
