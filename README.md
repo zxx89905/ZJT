@@ -2,8 +2,6 @@
   <img src="public/ico.png" width="150" height="150" alt="Posterfy Logo">
 </p>
 
-<h1 align="center">ZJT</h1>
-
 <p align="center">
   <em>Create stunning posters of your favorite albums powered by Spotify's API.</em>
 </p>
