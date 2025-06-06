@@ -1,15 +1,11 @@
 import { useTranslation } from 'react-i18next';
 import Navbar from './components/Navbar/Navbar';
-import Hero from './components/Hero';
-import Anchor from './components/Anchor';
-import SectionExplanation from './components/SectionExplanation';
 import Searchbar from './components/Searchbar';
 import { useState, useEffect } from 'react';
 import styled from "styled-components";
 import Loading from './components/Loading';
 import Footer from './components/Footer';
 import Grid from './components/Grid';
-import Faq from './components/Faq/Faq';
 import PosterEditor from './components/PosterEditor/PosterEditor'
 
 // 只保留A尺寸和2:3尺寸（2:3改为2700x4050）
@@ -43,84 +39,80 @@ const StyledSelect = styled.select`
   }
 `;
 
+// 添加间距容器组件
+const ContentContainer = styled.div`
+  padding-top: 80px; /* 导航栏高度，与导航栏固定定位匹配 */
+  min-height: calc(100vh - 80px); 
+`;
+
 function App() {
   const { t } = useTranslation();
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState('');
   const [albumId, setAlbumId] = useState(null);
 
-  // 只保A尺寸和2-3
   const [sizeKey, setSizeKey] = useState("A尺寸");
   const size = SIZE_PRESETS.find(s => s.key === sizeKey) || SIZE_PRESETS[0];
 
-  function onClickAlbum(id){
+  function onClickAlbum(id) {
     setAlbumId(id);
   }
 
-  function handleClickBack(){
+  function handleClickBack() {
     setAlbumId(null);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 1500);
-
+    const timer = setTimeout(() => setLoading(false), 1500);
     return () => clearTimeout(timer);
   }, []);
 
-  const onSearch = (newQuery) => {
-    setQuery(newQuery);
-  };
+  const onSearch = (newQuery) => setQuery(newQuery);
 
   return (
     <>
-      {loading ? (
-        <Loading />
-      ) : (
+      {loading ? <Loading /> : (
         <>
           <Navbar />
-          <Hero />
-          <Anchor text={t('anchorArt')} type={1} />
-          <SectionExplanation title={t('ArtTitle')} paragraph={t('ArtParagraph')} />
-
-          {/* 尺寸选择控件 */}
-          {albumId ? (
-            <>
-              <div style={{ margin: '16px 0', textAlign: 'center' }}>
-                <label style={{ fontWeight: 500, marginRight: 8, color: "#fff" }}>
-                  选择海报尺寸:
-                  <StyledSelect
-                    value={sizeKey}
-                    onChange={e => setSizeKey(e.target.value)}
-                  >
-                    {SIZE_PRESETS.map(preset => (
-                      <option key={preset.key} value={preset.key}>{preset.label}</option>
-                    ))}
-                  </StyledSelect>
-                </label>
-              </div>
-              <PosterEditor
-                albumID={albumId}
-                handleClickBack={handleClickBack}
-                posterWidth={size.width}
-                posterHeight={size.height}
-                posterRatio={sizeKey}
-              />
-            </>
-          ) : (
-            <>
-              <Searchbar onSearch={onSearch} />
-              {query && <Grid query={query} onclick={onClickAlbum} />}
-
-              <div style={{ display: query ? 'none' : 'block' }}>
-                <Anchor text={t('TryTrend')} type={2}/>
-                <Grid onclick={onClickAlbum} />
-              </div>
-            </>
-          )}
-
-          <Faq/>
+          <ContentContainer>
+            <Searchbar onSearch={onSearch} />
+            {query && <Grid query={query} onclick={onClickAlbum} />}
+            <div style={{ display: query ? 'none' : 'block' }}>
+              <Grid onclick={onClickAlbum} />
+            </div>
+            {albumId && (
+              <>
+                {/* 关键修改：使用绝对定位强制下移控件 */}
+                <div style={{ 
+                  position: 'relative', 
+                  top: '80px',  // 向下移动80px（可调整）
+                  margin: '0 auto',  // 保持居中
+                  width: 'fit-content',
+                  zIndex: 10  // 确保不被遮挡
+                }}> 
+                  <label>
+                    选择海报尺寸:
+                    <StyledSelect
+                      value={sizeKey}
+                      onChange={(e) => setSizeKey(e.target.value)}
+                    >
+                      {SIZE_PRESETS.map(preset => (
+                        <option key={preset.key} value={preset.key}>{preset.label}</option>
+                      ))}
+                    </StyledSelect>
+                  </label>
+                </div>
+                <PosterEditor
+                  albumID={albumId}
+                  handleClickBack={handleClickBack}
+                  posterWidth={size.width}
+                  posterHeight={size.height}
+                  posterRatio={sizeKey}
+                />
+              </>
+            )}
+          </ContentContainer>
           <Footer />
         </>
       )}

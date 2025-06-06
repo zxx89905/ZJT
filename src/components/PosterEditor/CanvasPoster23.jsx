@@ -83,29 +83,29 @@ const CanvasPoster = ({
                 );
 
                 // 其它信息
-                ctx.font = `bold ${Math.round(width * 0.030)}px ${fontFamily}`;
-                const infoY = Math.round(height * 0.943);
+                ctx.font = `bold ${Math.round(width * 0.032)}px ${fontFamily}`;
+                const infoY = Math.round(height * 0.936);
 
                 ctx.fillText(posterData.titleRelease, posterData.marginSide, infoY);
                 let releaseWidth = ctx.measureText(posterData.titleRelease).width;
                 ctx.fillText(posterData.titleRuntime, releaseWidth + posterData.marginSide + Math.round(width * 0.04), infoY);
 
                 ctx.globalAlpha = 0.7;
-                ctx.font = `bold ${Math.round(width * 0.023)}px ${fontFamily}`;
-                ctx.fillText(posterData.runtime, releaseWidth + posterData.marginSide + Math.round(width * 0.04), infoY + Math.round(width * 0.028));
-                ctx.fillText(posterData.releaseDate, posterData.marginSide, infoY + Math.round(width * 0.028));
+                ctx.font = `bold ${Math.round(width * 0.032)}px ${fontFamily}`;
+                ctx.fillText(posterData.runtime, releaseWidth + posterData.marginSide + Math.round(width * 0.04), infoY + Math.round(width * 0.038));
+                ctx.fillText(posterData.releaseDate, posterData.marginSide, infoY + Math.round(width * 0.038));
                 ctx.globalAlpha = 1;
 
                 // 彩色条
-                const barY = infoY + Math.round(width * 0.020);
-                const barW = Math.round(width * 0.070);
-                const barH = Math.round(width * 0.012);
+                const barY = infoY + Math.round(width * 0.032);
+                const barW = Math.round(width * 0.064);
+                const barH = Math.round(width * 0.014);
                 ctx.fillStyle = posterData.color1;
-                ctx.fillRect(Math.round(width * 0.781) - posterData.marginSide, barY, barW, barH);
+                ctx.fillRect(Math.round(width * 0.803) - posterData.marginSide, barY, barW, barH);
                 ctx.fillStyle = posterData.color2;
-                ctx.fillRect(Math.round(width * 0.852) - posterData.marginSide, barY, barW, barH);
+                ctx.fillRect(Math.round(width * 0.86872) - posterData.marginSide, barY, barW, barH);
                 ctx.fillStyle = posterData.color3;
-                ctx.fillRect(Math.round(width * 0.923) - posterData.marginSide, barY, barW, barH);
+                ctx.fillRect(Math.round(width * 0.934) - posterData.marginSide, barY, barW, barH);
             };
 
             const drawTracklist = async () => {
@@ -184,10 +184,10 @@ const CanvasPoster = ({
                     image.onload = function () {
                         ctx.drawImage(
                             image,
-                            Math.round(width * 0.770) - posterData.marginSide,
+                            Math.round(width * 0.792) - posterData.marginSide,
                             Math.round(height * 0.916),
-                            Math.round(width * 0.232),
-                            Math.round(height * 0.038)
+                            Math.round(width * 0.214),
+                            Math.round(height * 0.035)
                         );
                         const imageUrl = canvas.toDataURL('image/png');
                         onImageReady(imageUrl);

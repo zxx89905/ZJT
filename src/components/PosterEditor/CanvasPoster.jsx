@@ -1,15 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useRef, useEffect } from 'react';
 
-const CanvasPoster = ({
-    onImageReady,
-    posterData,
-    generatePoster,
-    onTitleSizeAdjust,
-    customFont,
-    width = 2480,
-    height = 3508,
-}) => {
+const CanvasPoster = ({ onImageReady, posterData, generatePoster, onTitleSizeAdjust, customFont }) => {
     const canvasRef = useRef(null);
 
     useEffect(() => {
@@ -18,6 +10,8 @@ const CanvasPoster = ({
 
             const canvas = canvasRef.current;
             const ctx = canvas.getContext('2d');
+            const width = 2480;
+            const height = 3508;
             posterData.marginSide = parseInt(posterData.marginSide) || 0;
             posterData.marginTop = parseInt(posterData.marginTop) || 0;
             posterData.marginCover = parseInt(posterData.marginCover) || 0;
@@ -36,12 +30,12 @@ const CanvasPoster = ({
                             width - posterData.marginCover * 2
                         );
                         if (posterData.useFade) {
-                            let verticalFade = ctx.createLinearGradient(0, 0, 0, Math.round(height * 0.85));
+                            let verticalFade = ctx.createLinearGradient(0, 0, 0, 3000);
                             const rgb = hexToRgb(posterData.backgroundColor);
                             verticalFade.addColorStop(0.5, `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0)`);
                             verticalFade.addColorStop(0.8, posterData.backgroundColor);
                             ctx.fillStyle = verticalFade;
-                            ctx.fillRect(0, 0, canvas.width, Math.round(height * 0.71));
+                            ctx.fillRect(0, 0, canvas.width, 2500);
                         }
                         resolve();
                     };
@@ -49,13 +43,12 @@ const CanvasPoster = ({
             };
 
             const drawAlbumInfos = async () => {
-                let titleFontSize = posterData.titleSize ? parseInt(posterData.titleSize) : Math.round(width * 0.093);
+                let titleFontSize = posterData.titleSize ? parseInt(posterData.titleSize) : 230;
                 const fontFamily = customFont || 'Montserrat';
                 if (!posterData.userAdjustedTitleSize && !posterData.initialTitleSizeSet) {
                     ctx.font = `bold ${titleFontSize}px ${fontFamily}`;
                     let titleWidth = ctx.measureText(posterData.albumName).width;
-
-                    while (titleWidth > (width - posterData.marginSide * 2)) {
+                    while (titleWidth > (2480 - posterData.marginSide * 2)) {
                         titleFontSize -= 1;
                         ctx.font = `bold ${titleFontSize}px ${fontFamily}`;
                         titleWidth = ctx.measureText(posterData.albumName).width;
@@ -66,46 +59,46 @@ const CanvasPoster = ({
                 }
                 ctx.fillStyle = posterData.textColor;
 
-                // 动态基线
-                const albumY = posterData.showTracklist
-                    ? Math.round(width * 1.01) + posterData.marginTop
-                    : Math.round(height * 0.796) + posterData.marginTop;
+                if (posterData.showTracklist) {
+                    ctx.fillText(posterData.albumName, posterData.marginSide, 2500 + posterData.marginTop);
+                } else {
+                    ctx.fillText(posterData.albumName, posterData.marginSide, 2790 + posterData.marginTop);
+                }
 
-                ctx.fillText(posterData.albumName, posterData.marginSide, albumY);
+                let artistsFontSize = posterData.artistsSize ? parseInt(posterData.artistsSize) : 110;
+                ctx.font = `bold ${artistsFontSize}px ${customFont || 'Montserrat'}`;
 
-                let artistsFontSize = posterData.artistsSize ? parseInt(posterData.artistsSize) : Math.round(width * 0.044);
-                ctx.font = `bold ${artistsFontSize}px ${fontFamily}`;
+                if (posterData.showTracklist) {
+                    ctx.fillText(
+                        posterData.artistsName,
+                        posterData.marginSide,
+                        (2500 + posterData.marginTop) + artistsFontSize * 1.3
+                    );
+                } else {
+                    ctx.fillText(
+                        posterData.artistsName,
+                        posterData.marginSide,
+                        (2820 + posterData.marginTop) + artistsFontSize
+                    );
+                }
 
-                ctx.fillText(
-                    posterData.artistsName,
-                    posterData.marginSide,
-                    albumY + artistsFontSize * 1.3
-                );
-
-                // 其它信息
-                ctx.font = `bold ${Math.round(width * 0.028)}px ${fontFamily}`;
-                const infoY = Math.round(height * 0.944);
-
-                ctx.fillText(posterData.titleRelease, posterData.marginSide, infoY);
+                ctx.font = `bold 70px ${customFont || 'Montserrat'}`;
+                ctx.fillText(posterData.titleRelease, posterData.marginSide, 3310);
                 let releaseWidth = ctx.measureText(posterData.titleRelease).width;
-                ctx.fillText(posterData.titleRuntime, releaseWidth + posterData.marginSide + Math.round(width * 0.04), infoY);
+                ctx.fillText(posterData.titleRuntime, releaseWidth + posterData.marginSide + 100, 3310);
 
                 ctx.globalAlpha = 0.7;
-                ctx.font = `bold ${Math.round(width * 0.024)}px ${fontFamily}`;
-                ctx.fillText(posterData.runtime, releaseWidth + posterData.marginSide + Math.round(width * 0.04), infoY + Math.round(width * 0.023));
-                ctx.fillText(posterData.releaseDate, posterData.marginSide, infoY + Math.round(width * 0.023));
+                ctx.font = `bold 60px ${customFont || 'Montserrat'}`;
+                ctx.fillText(posterData.runtime, releaseWidth + posterData.marginSide + 100, 3390);
+                ctx.fillText(posterData.releaseDate, posterData.marginSide, 3390);
                 ctx.globalAlpha = 1;
 
-                // 彩色条
-                const barY = infoY + Math.round(width * 0.017);
-                const barW = Math.round(width * 0.058);
-                const barH = Math.round(width * 0.012);
                 ctx.fillStyle = posterData.color1;
-                ctx.fillRect(Math.round(width * 0.825) - posterData.marginSide, barY, barW, barH);
+                ctx.fillRect(2045 - posterData.marginSide, 3368, 145, 30);
                 ctx.fillStyle = posterData.color2;
-                ctx.fillRect(Math.round(width * 0.884) - posterData.marginSide, barY, barW, barH);
+                ctx.fillRect(2190 - posterData.marginSide, 3368, 145, 30);
                 ctx.fillStyle = posterData.color3;
-                ctx.fillRect(Math.round(width * 0.943) - posterData.marginSide, barY, barW, barH);
+                ctx.fillRect(2335 - posterData.marginSide, 3368, 145, 30);
             };
 
             const drawTracklist = async () => {
@@ -113,15 +106,15 @@ const CanvasPoster = ({
                 let paddingMusic = posterData.marginSide + 10;
                 let maxWidth = 0;
                 let paddingColumn = 0;
-                const fontSize = posterData.tracksSize ? parseInt(posterData.tracksSize) : Math.round(width * 0.02);
+                const fontSize = posterData.tracksSize ? parseInt(posterData.tracksSize) : 50;
                 ctx.font = `bold ${fontSize}px ${customFont || 'Montserrat'}`;
                 const musicSize = fontSize;
 
                 const marginTop = parseInt(posterData.marginTop || 0);
-                const rectY = posterData.artistsSize
-                    ? Math.round(width * 1.01) + marginTop + parseInt(posterData.artistsSize) * 1.3 + Math.round(width * 0.052)
-                    : Math.round(width * 1.01) + marginTop + Math.round(width * 0.044 * 1.2) + Math.round(width * 0.052);
-                const rectHeight = Math.round(width * 0.2);
+                const rectY = parseInt(posterData.artistsSize)
+                    ? (2500 + marginTop) + parseInt(posterData.artistsSize) * 1.3 + 130
+                    : (2500 + marginTop) + (110 * 1.2) + 130;
+                const rectHeight = 500;
                 const rectWidth = width - (posterData.marginSide * 2);
                 const rectX = parseInt(posterData.marginSide);
                 const maxTextHeight = rectY + rectHeight - 10 - parseInt(posterData.marginTop);
@@ -163,32 +156,27 @@ const CanvasPoster = ({
                 const rgb = hexToRgb(posterData.backgroundColor);
                 const contrastColor = getContrast(rgb);
                 const targetColor = posterData.textColor;
+
                 const svgUrl = `https://scannables.scdn.co/uri/plain/svg/${posterData.backgroundColor.replace('#', '')}/${contrastColor}/640/spotify:album:${posterData.albumID}`;
-                
+
                 const response = await fetch(svgUrl);
                 let svgText = await response.text();
-                
-                if(contrastColor === 'black'){
+
+                if (contrastColor == 'black') {
                     svgText = svgText.replace(/fill="#000000"/g, `fill="${targetColor}"`);
-                } else{
+                } else {
                     svgText = svgText.replace(/fill="#ffffff"/g, `fill="${targetColor}"`);
                 }
-                
+
                 const svgBlob = new Blob([svgText], { type: "image/svg+xml" });
                 const updatedSvgUrl = URL.createObjectURL(svgBlob);
-            
+
                 return new Promise((resolve) => {
                     const image = new Image();
                     image.src = updatedSvgUrl;
-            
+
                     image.onload = function () {
-                        ctx.drawImage(
-                            image,
-                            Math.round(width * 0.815) - posterData.marginSide,
-                            Math.round(height * 0.922),
-                            Math.round(width * 0.194),
-                            Math.round(height * 0.034)
-                        );
+                        ctx.drawImage(image, 2020 - posterData.marginSide, 3235, 480, 120);
                         const imageUrl = canvas.toDataURL('image/png');
                         onImageReady(imageUrl);
                         resolve();
@@ -208,17 +196,19 @@ const CanvasPoster = ({
             } else {
                 await loadCover(posterData.albumCover);
             }
+
             await drawAlbumInfos();
             if (posterData.showTracklist) {
                 await drawTracklist();
             }
+            // 已删除水印功能
             await scannable();
         };
 
         generatePosterContent();
-    }, [generatePoster, posterData, onImageReady, width, height, customFont, onTitleSizeAdjust]);
+    }, [generatePoster, posterData, onImageReady]);
 
-    return <canvas ref={canvasRef} width={width} height={height} style={{ display: 'none' }} />;
+    return <canvas ref={canvasRef} width={2480} height={3508} style={{ display: 'none' }} />;
 };
 
 export default CanvasPoster;
